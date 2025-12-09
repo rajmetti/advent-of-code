@@ -11,17 +11,17 @@ public class Day1 {
     public static void main(String[] args) throws IOException{
         
         byte[] raw = Files.readAllBytes(Path.of(Day1.class.getResource("Day1Input.txt").getPath()));
-        int result = countTurns(new String(raw, StandardCharsets.UTF_8));
-        // ("L68\n" + //
-        //                 "L30\n" + //
-        //                 "R48\n" + //
-        //                 "L5\n" + //
-        //                 "R60\n" + //
-        //                 "L55\n" + //
-        //                 "L1\n" + //
-        //                 "L99\n" + //
-        //                 "R14\n" + //
-        //                 "L82");
+        //int result = countTurns(new String(raw, StandardCharsets.UTF_8));
+        int result = countTurns("L68\n" + // - 18 | - 1 rotation over 0
+                        "L30\n" + // -48
+                        "R48\n" + // 0
+                        "L5\n" + // -95
+                        "R60\n" + // 55 | 1 rotation over 0
+                        "L55\n" + // 0
+                        "L1\n" + // 99
+                        "L99\n" + // 0
+                        "R14\n" + // 14
+                        "L82"); // 62 | 1 rotation
         
         System.out.println(result);
     }
@@ -38,28 +38,37 @@ public class Day1 {
             String s = splits[i];
             char turn = s.charAt(0);
             int turns = Integer.valueOf(s.substring(1).trim());
-            System.out.println("turns : "+s);
             if (i == 0){
                 if(turn == 'L'){
                     current = ((initial - turns) + total) % 100;
-                    System.out.println("1st L's current "+current);
-                    if (current == 0) zeroCount +=1;
+                    zeroCount += (((turns))) / 50;
+                    if (current == 0) {
+                        zeroCount +=1;
+                    };
                 } else {
                     current = ((initial + turns) + total) % 100;
-                    System.out.println("1st R's current "+current);
-                    if (current == 0) zeroCount +=1;
+                    zeroCount += (((turns))) / 50;
+                    if (current == 0) {
+                        zeroCount +=1;
+                    }
                 }
+                System.out.println(s+" first turn rotated times : "+zeroCount);
                 continue;
             }
             if(turn == 'L'){
                 current = ((current - turns) + total) % 100;
-                System.out.println("L's current "+current);
-                if (current == 0) zeroCount +=1;
+                zeroCount += (Math.abs((current - turns))) / 50;
+                if (current == 0) {
+                    zeroCount +=1;
+                }
             } else {
                 current = ((current + turns)) % 100;
-                System.out.println("R's current "+current);
-                if (current == 0){ zeroCount +=1;}
+                zeroCount += (Math.abs((current - turns))) / 50;
+                if (current == 0){
+                    zeroCount +=1;
+                }
             }
+            System.out.println(s+" rotated times : "+zeroCount);
         }
         return zeroCount;
     }
